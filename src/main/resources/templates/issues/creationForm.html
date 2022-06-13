@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>課題作成　|　課題管理アプリケーション</title>
 </head>
 <body>
 <h1>課題作成</h1>
-<form>
+<form action="#" th:action="@{/issues}" th:method="post" th:object="${issueForm}">
     <div>
         <lavel for ="summaryInput">概要</lavel>
-        <input type="txet"　id="summaryInput">
+        <input type="text"　id="summaryInput" th:field="*{summary}">
     </div>
     <div>
         <lavel for ="descriptionInput">説明</lavel>
-        <textarea id="descriptionInput" row="10"></textarea>
+        <textarea id="descriptionInput" row="10" th:field="*{description}"></textarea>
     </div>
     <div>
         <button type="submmit">作成</button>
