@@ -13,4 +13,7 @@ public interface IssueRepository {
     List<IssueEntity> findAll();
     @Insert("insert into issues (summary, description) values (#{summary},#{description})")//#{}Mybatisの記法
     void insert(String summary, String description);
+
+    @Select("SELECT * FROM issues WHERE id = #{issueId}")
+    IssueEntity findById(long issueId);
 }

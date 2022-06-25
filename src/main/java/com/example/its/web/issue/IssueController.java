@@ -5,10 +5,9 @@ import com.example.its.domain.issue.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Controller
@@ -28,8 +27,19 @@ public class IssueController {
     }
     //POST/issues
     @PostMapping
-    public String create(IssueForm form, Model model){
+    public String create(@Validated IssueForm form, BindingResult bindingResult, Model model){
+        //BindingResult bindingResultは@Validatedのすぐ後ろに追加する必要あり
+        if(bindingResult.hasErrors()){
+            return showCreationForm(form);
+        }
         issueService.create(form.getSummary(), form.getDescription()) ;
-            return showList(model);//TODO リロードボタン対策が必要
+            return "redirect:/issues";
+    }
+    //Get localhost:8080/issues/1,2,3・・・
+    @GetMapping("/{issueId}")//動的に変わるパス(/1)を扱うため
+    public String showDetail(@PathVariable("issueId") long issueId, Model model){
+        model.addAttribute("issue", issueService.findById(issueId));
+        return "issues/detail";//ビュー名を指定
     }
 }
+
